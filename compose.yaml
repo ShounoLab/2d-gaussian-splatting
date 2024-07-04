@@ -11,6 +11,7 @@ services:
       # - /etc/group:/etc/group:ro
       - .:/root/2d-gs
       - ~/.ssh:/root/.ssh
+      - ~/dataset:/root/dataset
       # ports:
       #   - "8087:8088"
     working_dir: /root/2d-gs

@@ -32,6 +32,8 @@ RUN apt install -y ninja-build
 
 
 RUN pip install 'numpy<2'
+RUN apt install -y libgl1-mesa-dev
+RUN apt install -y libglib2.0-0
 
 # info from https://developer.nvidia.com/cuda-gpus
 # DLBOX1: GeForce RTX 3090: cc(compute capability)=8.6
