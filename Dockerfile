@@ -32,6 +32,7 @@ RUN apt install -y ninja-build
 
 
 RUN pip install 'numpy<2'
+RUN apt install -y git wget
 RUN apt install -y libgl1-mesa-dev
 RUN apt install -y libglib2.0-0
 
