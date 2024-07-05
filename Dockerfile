@@ -36,6 +36,8 @@ RUN apt install -y git wget
 RUN apt install -y libgl1-mesa-dev
 RUN apt install -y libglib2.0-0
 
+RUN pip install tensorboard
+
 # info from https://developer.nvidia.com/cuda-gpus
 # DLBOX1: GeForce RTX 3090: cc(compute capability)=8.6
 ENV TORCH_CUDA_ARCH_LIST="8.6+PTX"
