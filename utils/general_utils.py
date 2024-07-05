@@ -110,27 +110,33 @@ def build_scaling_rotation(s, r):
     return L
 
 def safe_state(silent):
+    """ Redirect stdout, Set random seed as 0, Set torch seed as 0, Set torch device as cuda:0
+    """
     old_f = sys.stdout
     class F:
+        """Stdout wrapper"""
         def __init__(self, silent):
             self.silent = silent
 
         def write(self, x):
             if not self.silent:
                 if x.endswith("\n"):
+                    # Add a timestamp to full line
                     old_f.write(x.replace("\n", " [{}]\n".format(str(datetime.now().strftime("%d/%m %H:%M:%S")))))
                 else:
+                    # Not a full line, just print it
                     old_f.write(x)
 
         def flush(self):
             old_f.flush()
 
+    # Redirect stdout to F
     sys.stdout = F(silent)
 
     random.seed(0)
     np.random.seed(0)
     torch.manual_seed(0)
-    torch.cuda.set_device(torch.device("cuda:0"))
+    torch.cuda.set_device(torch.device("cuda:0")) #TODO: available for other devices
 
 
 

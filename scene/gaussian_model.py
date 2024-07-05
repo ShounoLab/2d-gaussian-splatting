@@ -117,7 +117,8 @@ class GaussianModel:
     def get_covariance(self, scaling_modifier = 1):
         return self.covariance_activation(self.get_xyz, self.get_scaling, scaling_modifier, self._rotation)
 
-    def oneupSHdegree(self):
+    def oneupSHdegree(self): # SH: spherical harmonics 
+        """ Increase the SH degree by 1"""
         if self.active_sh_degree < self.max_sh_degree:
             self.active_sh_degree += 1
 
@@ -146,6 +147,8 @@ class GaussianModel:
         self.max_radii2D = torch.zeros((self.get_xyz.shape[0]), device="cuda")
 
     def training_setup(self, training_args):
+        """ Setup Hyperparameters, Optimizer and Learning Rate Schedulers for training
+        """
         self.percent_dense = training_args.percent_dense
         self.xyz_gradient_accum = torch.zeros((self.get_xyz.shape[0], 1), device="cuda")
         self.denom = torch.zeros((self.get_xyz.shape[0], 1), device="cuda")
@@ -326,6 +329,7 @@ class GaussianModel:
         return optimizable_tensors
 
     def densification_postfix(self, new_xyz, new_features_dc, new_features_rest, new_opacities, new_scaling, new_rotation):
+        """densification に関する諸々の初期化"""
         d = {"xyz": new_xyz,
         "f_dc": new_features_dc,
         "f_rest": new_features_rest,
@@ -373,7 +377,9 @@ class GaussianModel:
 
     def densify_and_clone(self, grads, grad_threshold, scene_extent):
         # Extract points that satisfy the gradient condition
+        # 勾配がしきい値を超える点を抽出するためのマスク
         selected_pts_mask = torch.where(torch.norm(grads, dim=-1) >= grad_threshold, True, False)
+        # さらに、マスクを更新する：スケーリングが一定の値を超える点を抽出する（AND条件）
         selected_pts_mask = torch.logical_and(selected_pts_mask,
                                               torch.max(self.get_scaling, dim=1).values <= self.percent_dense*scene_extent)
         
