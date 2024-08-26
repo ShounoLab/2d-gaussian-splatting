@@ -11,6 +11,7 @@
 from typing import Optional
 import os
 import torch
+from torchviz import make_dot
 from random import randint
 from utils.loss_utils import l1_loss, ssim
 from gaussian_renderer import render, network_gui
@@ -27,6 +28,17 @@ try:
     TENSORBOARD_FOUND = True
 except ImportError:
     TENSORBOARD_FOUND = False
+    
+def resize_graph(dot, size_per_element=0.15, min_size=12):
+    """Resize the graph according to how much content it contains.
+    Modify the graph in place.
+    """
+    # Get the approximate number of nodes and edges
+    num_rows = len(dot.body)
+    content_size = num_rows * size_per_element
+    size = max(min_size, content_size)
+    size_str = str(size) + "," + str(size)
+    dot.graph_attr.update(size=size_str)
 
 def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoint_iterations, checkpoint):
     #
@@ -80,6 +92,11 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
         # Loss 
         gt_image = viewpoint_cam.original_image.cuda()
         Ll1 = l1_loss(image, gt_image)
+        dot = make_dot(Ll1, show_attrs=True)
+        dot.format = 'png'
+        resize_graph(dot, size_per_element=1, min_size=20)
+        dot.render('loss_Ll1')
+        
         loss = (1.0 - opt.lambda_dssim) * Ll1 + opt.lambda_dssim * (1.0 - ssim(image, gt_image))
         
         # regularization

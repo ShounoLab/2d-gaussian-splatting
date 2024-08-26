@@ -44,8 +44,4 @@ ENV TORCH_CUDA_ARCH_LIST="8.6+PTX"
 
 WORKDIR /root/2d-gs
 
-COPY ./submodules ./submodules
-RUN pip install -e ./submodules/diff-surfel-rasterization
-RUN pip install -e ./submodules/simple-knn
-
 CMD ["/bin/bash"]
