@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: 2d-gsplat-dev-container
     image: 2dgsplat:1.0
+    shm_size: 8g
     # user: 1010:1010 #terada
     volumes:
       # - /etc/passwd:/etc/passwd:ro
@@ -23,4 +24,5 @@ services:
         reservations:
           devices:
             - driver: nvidia
+              count: all
               capabilities: [gpu]

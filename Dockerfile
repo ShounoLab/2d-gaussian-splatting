@@ -37,10 +37,15 @@ RUN apt install -y libgl1-mesa-dev
 RUN apt install -y libglib2.0-0
 
 RUN pip install tensorboard
+RUN pip install torchviz
+RUN apt update -y
+RUN apt install -y graphviz 
+RUN pip install -U setuptools>=75
 
 # info from https://developer.nvidia.com/cuda-gpus
 # DLBOX1: GeForce RTX 3090: cc(compute capability)=8.6
-ENV TORCH_CUDA_ARCH_LIST="8.6+PTX"
+# DLBOX2: TITIAN RTX: cc 7.5
+ENV TORCH_CUDA_ARCH_LIST="7.5 8.6+PTX"
 
 WORKDIR /root/2d-gs
 
