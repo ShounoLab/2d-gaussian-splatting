@@ -87,7 +87,7 @@ To export a mesh with an arbitrary size, we devised an unbounded TSDF fusion wit
 python render.py -m <path to pre-trained model> -s <path to COLMAP dataset> --mesh_res 1024
 ```
 
-### Quick Examples
+## Quick Examples
 Assuming you have downloaded [MipNeRF360](https://jonbarron.info/mipnerf360/), simply use
 ```bash
 python train.py -s <path to m360>/<garden> -m output/m360/garden
@@ -129,7 +129,7 @@ We provide <a> Evaluation Results (Pretrained, Images)</a>.
 </details>
 
 #### Geometry reconstruction
-For geometry reconstruction on DTU dataset, please download the preprocessed [data](https://drive.google.com/drive/folders/1SJFgt8qhQomHX55Q4xSvYE2C6-8tFll9). You also need to download the ground truth [DTU point cloud](https://roboimagedata.compute.dtu.dk/?page_id=36). 
+For geometry reconstruction on DTU dataset, please download the preprocessed data from [Drive](https://drive.google.com/drive/folders/1SJFgt8qhQomHX55Q4xSvYE2C6-8tFll9) or [Hugging Face](https://huggingface.co/datasets/dylanebert/2DGS). You also need to download the ground truth [DTU point cloud](https://roboimagedata.compute.dtu.dk/?page_id=36). 
 ```bash
 python scripts/dtu_eval.py --dtu <path to the preprocessed DTU dataset>   \
      --DTU_Official <path to the official DTU dataset>
@@ -148,9 +148,16 @@ Chamfer distance on DTU dataset (lower is better)
 <br>
 
 For geometry reconstruction on TnT dataset, please download the preprocessed [TnT_data](https://huggingface.co/datasets/ZehaoYu/gaussian-opacity-fields/tree/main). You also need to download the ground truth [TnT_GT](https://www.tanksandtemples.org/download/), including ground truth point cloud, alignments and cropfiles.
+
+**Due to historical issue, you should use open3d==0.10.0 for evaluating TNT.**
 ```bash
+# use open3d 0.18.0, skip metrics
 python scripts/tnt_eval.py --TNT_data <path to the preprocessed TNT dataset>   \
-     --TNT_GT <path to the official TNT evaluation dataset>
+     --TNT_GT <path to the official TNT evaluation dataset> --skip_metrics
+
+# use open3d 0.10.0, skip traing and rendering
+python scripts/tnt_eval.py --TNT_data <path to the preprocessed TNT dataset>   \
+     --TNT_GT <path to the official TNT evaluation dataset> --skip_training --skip_rendering
 ```
 We provide <a> Evaluation Results (Pretrained, Meshes)</a>. 
 <details>
